@@ -1,0 +1,26 @@
+# Dockerfile.backend (Production)
+FROM node:18-alpine
+
+WORKDIR /app
+
+# Copier les fichiers de configuration
+COPY backend/package*.json ./
+
+# Installer les dépendances
+RUN npm ci --only=production
+
+# COPIE CORRECTE - copier tout le dossier backend
+COPY backend/ ./backend/
+
+# Créer un utilisateur non-root pour la sécurité
+RUN addgroup -g 1001 -S nodejs && \
+    adduser -S nodejs -u 1001 && \
+    chown -R nodejs:nodejs /app
+
+USER nodejs
+
+# Exposer le port
+EXPOSE 3000
+
+# Commande corrigée
+CMD ["node", "/app/backend/src/app.js"]

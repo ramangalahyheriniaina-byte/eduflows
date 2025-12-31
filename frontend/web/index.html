@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="EduFlows">
+
+  <!-- iOS meta -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="apple-mobile-web-app-title" content="EduFlows">
+  <link rel="apple-touch-icon" href="icons/Icon-192.png">
+
+  <!-- favicon -->
+  <link rel="icon" type="image/png" href="favicon.png"/>
+
+  <title>EduFlows</title>
+  <link rel="manifest" href="manifest.json">
+
+  <!--Forcer HTML renderer au lieu de CanvasKit -->
+  <script>
+    window.flutterWebRenderer = "html";
+  </script>
+
+  <!-- CSP elargie pour developpement -->
+  <meta http-equiv="Content-Security-Policy" 
+        content="default-src 'self' 'unsafe-inline' 'unsafe-eval' http://localhost:3000 http://localhost:8080 https://www.gstatic.com https://fonts.gstatic.com https://fonts.googleapis.com;
+                 connect-src 'self' http://localhost:3000 http://localhost:8080 ws://localhost:8080 https://www.gstatic.com https://fonts.gstatic.com;
+                 script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.gstatic.com;
+                 style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
+                 font-src 'self' data: https://fonts.gstatic.com;
+                 img-src 'self' data: blob:;
+                 media-src 'self' data:;
+                 worker-src 'self' blob:;">
+</head>
+<body>
+  <script>
+    // Configuration pour le proxy
+    window.FLUTTER_PROXY_CONFIG = {
+      apiUrl: '/api',
+      backendUrl: 'http://localhost:3000',
+      mode: 'development'
+    };
+
+    console.log('EduFlows démarre avec proxy configure');
+    console.log('API via proxy: /api -> http://localhost:3000/api');
+
+    // Desactiver les service workers deja enregistrs
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.getRegistrations().then(function(registrations) {
+        for(let registration of registrations) {
+          registration.unregister();
+        }
+        console.log('Service worker desactive');
+      });
+    }
+  </script>
+
+  <!-- Flutter -->
+  <script src="flutter.js" defer></script>
+  <script src="main.dart.js" type="application/javascript"></script>
+
+  <!-- Fallback si Flutter échoue -->
+  <script>
+    setTimeout(function() {
+      if (!window.flutterAppLoaded) {
+        console.warn('!! Flutter n\'a pas demarre !!, affichage du fallback...');
+        document.body.innerHTML = `
+          <div style="text-align: center; padding: 50px; font-family: Arial, sans-serif;">
+            <h1>EduFlows</h1>
+            <p>L'application est en cours de chargement...</p>
+            <p>Si cette page persiste, vérifiez:</p>
+            <ul style="text-align: left; display: inline-block;">
+              <li>La console du navigateur (F12)</li>
+              <li>Votre connexion Internet (pour CanvasKit)</li>
+              <li>Que le backend tourne sur localhost:3000</li>
+            </ul>
+            <button onclick="location.reload()" style="margin: 20px; padding: 10px 20px;">
+              Recharger la page
+            </button>
+          </div>
+        `;
+      }
+    }, 5000);
+
+    // Marquer quand Flutter démarre
+    window.addEventListener('flutter-first-frame', function() {
+      window.flutterAppLoaded = true;
+      console.log('Flutter a démarre!........');
+    });
+  </script>
+</body>
+</html>
+
+

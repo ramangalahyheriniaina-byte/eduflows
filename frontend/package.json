@@ -1,0 +1,13 @@
+{
+  "name": "eduflows-frontend",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "start": "flutter run -d chrome --web-port=8080",
+    "build": "flutter build web",
+    "dev": "./start_dev.sh",
+    "proxy-test": "curl http://localhost:8080/api/health"
+  },
+  "devDependencies": {},
+  "proxy": "http://localhost:3000"
+}
